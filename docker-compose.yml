@@ -1,0 +1,25 @@
+
+version: '3'
+services:
+  db:
+    image: percona:5.7
+    container_name: financial_data_assigment_database
+    environment:
+      - MYSQL_DATABASE=${DATABASE}
+      - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
+      - MYSQL_USER=${MY_SQL_USER}
+      - MYSQL_PASSWORD=${MY_SQL_PASSWORD}
+    volumes:
+      - ./data:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:${PORT}"
+
+  pythonapi:
+    image: pythonapi
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 5002:5000
+    env_file:
+      - .env
